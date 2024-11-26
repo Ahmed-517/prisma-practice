@@ -14,10 +14,23 @@ datasource db {
 }
 
 model User {
-  id    Int    @id @default(autoincrement())
-  email String @unique
-  name  String @map("firsName")
-  role  String
+  id      Int      @id @default(autoincrement())
+  email   String   @unique
+  name    String   @map("firsName")
+  role    Role?    @default(USER)
+  Profile Profile?
 
   @@map("users")
+}
+
+model Profile {
+  id     Int    @id @default(autoincrement())
+  bio    String
+  userId Int    @unique
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+enum Role {
+  USER
+  ADMIN
 }
