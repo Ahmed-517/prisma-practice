@@ -14,12 +14,15 @@ datasource db {
 }
 
 model User {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  name    String   @map("firsName")
-  role    Role?    @default(USER)
-  Profile Profile?
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String   @map("firsName")
+  role      Role?    @default(USER)
+  profileId Int?     @unique
+  profile   Profile? @relation(fields: [profileId], references: [id])
 
+  @@unique([name, role])
+  @@index([id, email])
   @@map("users")
 }
 
@@ -27,7 +30,7 @@ model Profile {
   id     Int    @id @default(autoincrement())
   bio    String
   userId Int    @unique
-  user   User   @relation(fields: [userId], references: [id])
+  user   User?
 }
 
 enum Role {
